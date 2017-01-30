@@ -1,17 +1,21 @@
 'use strict';
 
 import React from 'react';
-import AthletePreview from './AthletePreview';
-import athletes from '../data/athletes';
+import ListPreview from './ListPreview';
+import songs from '../data/mockSongs'
 
 export default class IndexPage extends React.Component {
   render() {
     return (
       <div className="home">
         <div className="athletes-selector">
-          {athletes.map(athleteData => <AthletePreview key={athleteData.id} {...athleteData} />)}
+            <h1>Title</h1>
+            {songs.map(songData => <ListPreview key={songData.name} {...songData} />)}
         </div>
       </div>
     );
   }
 }
+
+
+//{songs.map(songData => <listPreviw key={songData.name} {...songData} />)}

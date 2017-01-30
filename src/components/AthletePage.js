@@ -15,14 +15,12 @@ export default class AthletePage extends React.Component {
     if (!athlete) {
       return <NotFoundPage/>;
     }
-    const headerStyle = { backgroundImage: `url(/img/${athlete.cover})` };
+    //const headerStyle = { backgroundImage: `url(/img/${athlete.cover})` };
     return (
       <div className="athlete-full">
         <AthletesMenu/>
         <div className="athlete">
-          <header style={headerStyle}/>
           <div className="picture-container">
-            <img src={`/img/${athlete.image}`}/>
             <h2 className="name">{athlete.name}</h2>
           </div>
           <section className="description">
