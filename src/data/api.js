@@ -1,7 +1,8 @@
-var xss = require('xss'),
-sql = require('pg');
 
-var DATABASE_URL = process.en.DATABASE_URL;
+//import sql from 'pg';
+//var xss = require('xss'),
+
+//var DATABASE_URL = process.env.DATABASE_URL;
 
 module.exports = {
 
@@ -23,26 +24,28 @@ module.exports = {
 
 		//so some database stuff
 
-		res.json(/*data*/)
-	}
+		//res.json(/*data*/)
+		return res+10;
+	},
+
 	unregisterUser: function(req, res){
 
 		//so some database stuff
 
 		res.json(/*data*/)
-	}
+	},
 	addSong: function(req, res){
 
 		//so some database stuff
 
 		res.json(/*data*/)
-	}
+	},
 	removeSong: function(req, res){
 
 		//so some database stuff
 
 		res.json(/*data*/)
-	}
+	},
 
 
 	queueData: function(req, res){
@@ -50,7 +53,7 @@ module.exports = {
 		//do some database stuff
 
 		res.json(/*data*/)
-	}
+	},
 
 	doesQueueExist: function(req, res){
 

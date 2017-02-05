@@ -1,5 +1,5 @@
 "use strict";
-
+var nodeExternals = require('webpack-node-externals');
 const debug = true //process.env.NODE_ENV !== "production";
 
 const webpack = require('webpack');
@@ -44,5 +44,7 @@ module.exports = {
       beautify: false,
       dead_code: true
     }),
-  ]
+  ],
+  //target: 'node',
+  //externals: [nodeExternals()],
 };
