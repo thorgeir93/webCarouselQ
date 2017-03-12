@@ -54,3 +54,9 @@ babel_cache
 # Linux swap files
 **/*.swp
 
+
+# error log
+npm-debug.log
+
+# Backup files
+*~backup~*
