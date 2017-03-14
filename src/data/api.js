@@ -4,6 +4,7 @@
 
 import sql from 'pg';
 var DATABASE = process.env.DATABASE_URL;
+console.log(DATABASE);
 
 //connect to the postgres server
 
@@ -29,9 +30,16 @@ module.exports = {
 	// possibly some res.redirect('/somewhere');
 	register: function(req, res){
 		
-			console.log(DATABASE);
+			var client = new sql.Client({
+			    user: "aixzgiczbsccjr",
+			    password: "9Q7xadrfnTdjRjkuCwGsBK8MNO",
+			    database: "d4mosb6d68gq6j",
+			    port: 5432,
+			    host: "ec2-54-217-217-153.eu-west-1.compute.amazonaws.com",
+			    ssl: true
+			}); 
 		//var connectToDatabase = function(cb){
-			sql.connect(DATABASE, function(error,client,done){
+			client.connect(function(error,client,done){
 		    if(error){
 		      console.log(error);
 		    }else{
