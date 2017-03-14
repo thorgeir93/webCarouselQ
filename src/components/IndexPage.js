@@ -5,13 +5,13 @@ import { Link } from 'react-router';
 //import ListPreview from './ListPreview';
 //import songs from '../data/mockSongs'
 import ButtonWide from './ButtonWide'
-import api from '../data/api';
+
 
 export default class IndexPage extends React.Component {
   render() {
-    var x  = api.register(10,10)
     return (
 		<div>
+      <p>hallo</p>
 			<Link to="/host">
 				<ButtonWide name='Host' color='#0044ff'></ButtonWide>
 			</Link>
