@@ -2,9 +2,8 @@ import api from './src/data/api';
 
 module.exports = function(app){
 
-    app.get('/api',api.test);
-
-    app.get('/api/register', api.register);
+    //returns 201 if success
+    app.post('/api/register', api.register);
 
 	app.get('/api/unregisterUser', api.unregisterUser);
 
