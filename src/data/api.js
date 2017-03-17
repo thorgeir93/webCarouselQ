@@ -1,60 +1,52 @@
-
-//import sql from 'pg';
-//var xss = require('xss'),
-
-import sql from 'pg';
-var DATABASE = process.env.DATABASE_URL;
-console.log(DATABASE);
+import xss from 'xss';
+import helper from './databaseHelper';
 
 //connect to the postgres server
-
-
 module.exports = {
-
-	/*app.get('/category', function(req, res) {
-	  req.api.data = data;
-	  res.redirect('/somewhere');
-	});
-	And later on after the redirect...
-	
-	app.get('/', function(req, res) {
-	  var passedVariable = req.session.valid;
-	  req.session.valid = null; // resets session variable
-	  // Do something
-	});*/
-	test: function(req,res) {
-  return res.status(200).json({
-    message: "Hello world!"
-  })},
 
 	// possibly some res.redirect('/somewhere');
 	register: function(req, res){
 		
-			var client = new sql.Client({
-			    user: "aixzgiczbsccjr",
-			    password: "9Q7xadrfnTdjRjkuCwGsBK8MNO",
-			    database: "d4mosb6d68gq6j",
-			    port: 5432,
-			    host: "ec2-54-217-217-153.eu-west-1.compute.amazonaws.com",
-			    ssl: true
-			}); 
-		//var connectToDatabase = function(cb){
-			client.connect(function(error,client,done){
-		    if(error){
-		      console.log(error);
-		    }else{
-		    	console.log('vei nadi ad tengjast');
-		    	//return cb(client);
-		    }
-		});
-		//}
-		////so some database stuff
-		//connectToDatabase((client) =>{
-		//	console.log('vei nadi ad tengjast')
-		//})
+		var username = xss(req.body.userName);
+		var owner = xss(req.body.owner);
+		var queueId = '\"'+xss(req.body.queueId)+'\"';
+		var hash = helper.generateHashName();
+		var hashArray = '{\"'+hash+'\"}';
 
-		//res.json(/*data*/)
-		return res+10;
+		var valuesFor_insertIntoUserInfo = [username,hashArray,owner,hash];
+    	var insertIntoUserInfo = 'INSERT INTO userinfo (userinfo_name, userinfo_hashname, UserInfo_Qowner, UserInfo_Active, UserInfo_hashNameId, userinfo_songsplayed) VALUES($1, $2, $3, true, $4,0)'
+    	
+    	var valuesFor_insertIntoQueues = [queueId,hashArray]
+    	var insertIntoQueues = 'INSERT INTO queues (queue_id, users) VALUES($1, $2)';
+
+    	var valuesFor_updateQueues = valuesFor_insertIntoQueues;
+    	var updateQueues = 'update queues set users = (select users from queues where queue_id = $1) || $2 where queue_id = $1';
+
+    	console.log(username, owner, queueId, hash, hashArray);
+		helper.getClient((client) => {
+			
+			helper.executeQuery(client, insertIntoUserInfo, valuesFor_insertIntoUserInfo, (result) => {
+				if(!result){
+					return res.sendStatus(500);
+				}
+
+				if(owner){
+					helper.executeQuery(client, insertIntoQueues, valuesFor_insertIntoQueues,(result) => {
+						if(!result){
+							return res.sendStatus(500);
+						}
+						return res.sendStatus(200);
+					});
+				}else{
+					helper.executeQuery(client, updateQueues, valuesFor_updateQueues,(result) => {
+						if(!result){
+							return res.sendStatus(500);
+						}
+						return res.sendStatus(200);
+					});
+				}
+			});
+		});
 	},
 
 	unregisterUser: function(req, res){

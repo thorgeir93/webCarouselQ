@@ -9,6 +9,8 @@ import { match, RouterContext } from 'react-router';
 import routes from './routes';
 import NotFoundPage from './components/NotFoundPage';
 import api from './data/api';
+//var bodyParser = require('body-parser')
+import bodyParser from 'body-parser';
 
 // initialize the server and configure support for ejs templates
 const app = new Express();
@@ -20,6 +22,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(Express.static(path.join(__dirname, 'static')));
 
 //app.get('/api',api.test);
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+
+require('dotenv').config()
 require('../apiRoutes')(app);
 
 // universal routing and rendering
