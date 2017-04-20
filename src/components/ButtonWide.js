@@ -5,22 +5,47 @@ import { Row, Col } from 'react-flexbox-grid';
 import style from '../static/css/style.css'
 
 export default class ButtonWide extends React.Component {
-
   	render() {
 		return (
-			<Row className={[	style.full_width, 
+			<div className={[	style.full_width, 
 								style.fill_height].join(' ')}>
-				<Col md={2} className={style.fill}>
-
-					<Link to={this.props.to}>
+				<div className={style.full_height}>
+					<Link to={this.props.to} style={{textDecoration: "none"}}>
 						<button className={style.button_wide} 
-								style={ {background:this.props.color} }>
-								{this.props.title}
+								style={ {background: this.props.bgColor} }>
+                                <h1 className={style.title_big_trans}
+								    style={ {
+                                        color: this.props.fontColor
+                                    } }> 
+								    {this.props.title}
+                                </h1>
 						</button>
 					</Link>
 
-				</Col>
-			</Row>
+				</div>
+			</div>
     	);
   	}
 }
+                                //<span className={style.title_big_trans}>
+								//    {this.props.title}
+                                //</span>
+
+			//<Row className={[	style.full_width, 
+			//					style.fill_height].join(' ')}>
+			//	<Col md={2} className={style.fill}>
+
+			//		<Link to={this.props.to} style={{textDecoration: "none"}}>
+			//			<button className={style.button_wide} 
+			//					style={ {background: this.props.bgColor} }>
+            //                    <h1 className={style.title_big_trans}
+			//					    style={ {
+            //                            color: this.props.fontColor
+            //                        } }> 
+			//					    {this.props.title}
+            //                    </h1>
+			//			</button>
+			//		</Link>
+
+			//	</Col>
+			//</Row>
