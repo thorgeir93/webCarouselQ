@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import BrowserHistory from 'react-router/lib/browserHistory';
 import style from '../static/css/style.css'
-import logo  from '../static/images/cq-logo.png'
+//import logo  from '../static/images/cq-logo.png'
 
 export default class Header extends React.Component {
   render() {

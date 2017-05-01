@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import InfoPage from './InfoPage'
 import style from '../static/css/style.css'
-import logo  from '../static/images/cq-logo.png'
+//import logo  from '../static/images/cq-logo.png'
 
 export default class Footer extends React.Component {
 

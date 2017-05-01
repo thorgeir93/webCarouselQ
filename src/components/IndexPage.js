@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-//import { Grid, Row, Col } from 'react-flexbox-grid';
 import ButtonWide from './ButtonWide'
 import style from '../static/css/style.css'
 

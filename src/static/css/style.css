@@ -52,6 +52,7 @@ body {
 
 .mainContent {
     order: 3;
+    background-color: rgb(99,99,99);
     /*height: 152vw;*/
 }
 
@@ -130,6 +131,8 @@ body {
     font-family: sans-serif;
     color: white;
     text-align: center; 
+    max-width: 400px;
+    margin: 0 auto 0 auto;
 }
 
 .host h1 {

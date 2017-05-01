@@ -2,6 +2,8 @@ import api from './src/data/api';
 
 module.exports = function(app){
 
+    console.log( 'Setting up api\'s' )
+
     //returns 201 if success
     app.post('/api/register', api.register);
 

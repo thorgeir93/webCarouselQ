@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react'
 import { Link } from 'react-router';
-import { Row, Col } from 'react-flexbox-grid';
 import style from '../static/css/style.css'
 
 export default class ButtonWide extends React.Component {

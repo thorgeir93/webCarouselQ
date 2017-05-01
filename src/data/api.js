@@ -1,15 +1,21 @@
 import xss from 'xss';
 import helper from './databaseHelper';
 
+// TODO 
+//      -   (thorgeir asks) return queueID when register ?
+//      -   implement the queueID thing.
+
 //connect to the postgres server
 module.exports = {
 
 	// possibly some res.redirect('/somewhere');
 	register: function(req, res){
-		
+        
+        console.log( req.body )
+
 		var username = xss(req.body.userName);
 		var owner = xss(req.body.owner);
-		var queueId = '\"'+xss(req.body.queueId)+'\"';
+		var queueId = 'test1'
 		var hash = helper.generateHashName();
 		var hashArray = '{\"'+hash+'\"}';
 
@@ -23,6 +29,7 @@ module.exports = {
     	var updateQueues = 'update queues set users = (select users from queues where queue_id = $1) || $2 where queue_id = $1';
 
     	console.log(username, owner, queueId, hash, hashArray);
+        return queueId
 		helper.getClient((client) => {
 			
 			helper.executeQuery(client, insertIntoUserInfo, valuesFor_insertIntoUserInfo, (result) => {
