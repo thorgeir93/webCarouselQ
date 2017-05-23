@@ -1,23 +1,24 @@
 'use strict';
-
 import React from 'react';
-import { Link } from 'react-router';
-//import ListPreview from './ListPreview';
-//import songs from '../data/mockSongs'
 import ButtonWide from './ButtonWide'
-
+import style from '../static/css/style.css'
 
 export default class IndexPage extends React.Component {
   render() {
     return (
-		<div>
-      <p>hallo</p>
-			<Link to="/host">
-				<ButtonWide name='Host' color='#0044ff'></ButtonWide>
-			</Link>
-			<Link to="/join">
-				<ButtonWide name='Join' color='#23020'></ButtonWide>
-			</Link>
+		<div style={{height:'100%'}}>
+			<div className={style.full_height}>
+				<ButtonWide title='Host' 
+							bgColor='#191919'
+							fontColor='#23730f'
+							to='/host'>
+				</ButtonWide>
+				<ButtonWide title='Join' 
+							bgColor='#23730f'
+						    fontColor='#191919'
+							to='/join'>
+				</ButtonWide>
+			</div>
 		</div>
     );
   }

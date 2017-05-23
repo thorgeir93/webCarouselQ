@@ -28,15 +28,34 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
-require('dotenv').config()
-require('../apiRoutes')(app);
+
+//
+// Middleware
+//
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+
+app.use(allowCrossDomain);
+
+import dotenv from 'dotenv'
+import apiRoutes from '../apiRoutes'
+dotenv.config()
+apiRoutes(app)
+//require('dotenv').config()
+//require('../apiRoutes')(app);
 
 // universal routing and rendering
 app.get('*', (req, res) => {
+  console.log( 'Request url man:' + req.url )
+  console.log( 'Available routes:' )
   match(
     { routes, location: req.url },
     (err, redirectLocation, renderProps) => {
-
+    
       // in case of error display the error message
       if (err) {
         return res.status(500).send(err.message);
