@@ -15,4 +15,7 @@ module.exports = function(app){
 
 	app.get('/api/doesQueueExist', api.doesQueueExist);
 
+	app.post('/api/test', api.testPost);
+
+	app.get('/api/test', api.testGet);
 }

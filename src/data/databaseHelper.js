@@ -1,48 +1,50 @@
-import sql from 'pg';
+var pgp = require('pg-promise')();
 
 module.exports = {
-	
-	getClient: function(callback){
 
-		var client = new sql.Client({
+	executeQuery: function(query, values){
+		var sql = pgp({
+		    host: process.env.DB_HOST,
+		    port: process.env.DB_PORT,
+		    database: process.env.DB_DATABASE,
 		    user: process.env.DB_USER,
 		    password: process.env.DB_PASSWORD,
-		    database: process.env.DB_DATABASE,
-		    port: process.env.DB_PORT,
-		    host: process.env.DB_HOST,
 		    ssl: true
-		}); 
-
-		client.connect(function(error,client,done){
-		   	if(error){
-		   	  console.log(error);
-		   	  callback(null);
-		   	}else{
-		   		console.log('vei nadi ad tengjast');
-		   		return callback(client);
-		   	}
-	    });
+    	});
+		return sql.query(query, values)
 	},
 
-	executeQuery: function(client, query, values, callback){
-		client.query(query, values, function(err, result){
-			if(err){
-				console.log(err);
-				return callback(null);
+	executeBatchQuery: function(queries, values){
+		//might be useful in the future but is not in use currently 23.05.2017
+		var batchActions = [];
+
+		var sql = pgp({
+		    host: process.env.DB_HOST,
+		    port: process.env.DB_PORT,
+		    database: process.env.DB_DATABASE,
+		    user: process.env.DB_USER,
+		    password: process.env.DB_PASSWORD,
+		    ssl: true
+    	});
+
+		return sql.tx(t => {
+
+			for(var i = 0; i < queries.length; i++){
+				console.log(queries[i], values[i]);
+				batchActions.push(t.none(queries[i], values[i]));
 			}
-			else{
-				return callback(result);
-			}
+
+			return t.batch(batchActions);
 		});
 	},
 
-	generateHashName: function(){
+	generateHash: function(specifiedLength){
 		
 		//22fmaqjrr8matg663rti1amb1i
 		var text = "";
 	    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-	    for( var i=0; i < 25; i++ ){
+	    var length = specifiedLength || 25;
+	    for( var i=0; i < length; i++ ){
 	        text += possible.charAt(Math.floor(Math.random() * possible.length));
 	    }
 
