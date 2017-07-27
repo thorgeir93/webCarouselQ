@@ -20,4 +20,6 @@ module.exports = function(app){
 	app.post('/api/test', api.testPost);
 
 	app.get('/api/test', api.testGet);
+
+	app.get('/api/search', api.search);
 }

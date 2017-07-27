@@ -14,12 +14,12 @@ export default class Layout extends React.Component {
         <div className={style.mainContent}>
             {this.props.children}
         </div>
-
-        <Footer></Footer>
       </div>
     );
   }
 }
+        //<Footer></Footer>
+        //
         //<footer className={style.overlap_layer}>
         //  <p>
         //    our private and totally original footer   

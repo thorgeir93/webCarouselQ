@@ -118,5 +118,13 @@ module.exports = {
 		//do some database stuff
 
 		res.json(/*data*/)
+	},
+	
+    search: function(req, res){
+        //mock_list_of_songs = {
+        //    ''
+        //}
+		res.json(/*data*/)
 	}
+
 }
