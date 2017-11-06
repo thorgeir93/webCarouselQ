@@ -38,7 +38,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use(session({
   store: new MongoStore({
-    //talaðu við mig þorgeir ;)
+    db: process.env.mongodb,
+    host: process.env.mongohost,
+    port: process.env.mongoport,
+    url: process.env.mongourl
   })
 }));
 

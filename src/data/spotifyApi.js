@@ -3,10 +3,12 @@ import request from 'request-promise';
 import querystring from 'querystring';
 import spotifyHelper from './spotifyHelper';
 import spotifyWebApi from 'spotify-web-api-node';
+import dotenv from 'dotenv'
+dotenv.config();
 
-//talaðu við mig þorgeir til að fá leyni lykkla fyrir spotify dótið. vil ekki tékka það inn
-var redirect_uri = 'http://localhost:3000/api/spotify/callback'; // Your redirect uri
-
+var client_id = process.env.client_id;
+var client_secret = process.env.client_secret;
+var redirect_uri = process.env.redirect_uri;
 var stateKey = 'spotify_auth_state';
 
 var options;

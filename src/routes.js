@@ -3,7 +3,7 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 import Layout from './components/Layout';
-import Player_layout from './components/Player_layout';
+//import Player_layout from './components/Player_layout';
 import IndexPage from './components/IndexPage';
 import MainTest from './components/MainTest';
 import Host from './components/Host';

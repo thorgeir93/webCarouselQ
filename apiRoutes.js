@@ -21,8 +21,7 @@ module.exports = function(app){
 	app.post('/api/test', api.testPost);
 
 	app.get('/api/test', api.testGet);
-
-<<<<<<< HEAD
+	
 	app.get('/api/spotify/login', spotifyApi.login);
 
 	app.get('/api/spotify/callback', spotifyApi.callback);
@@ -30,7 +29,4 @@ module.exports = function(app){
 	app.get('/api/spotify/refreshToken', spotifyApi.refreshToken);
 
 	app.get('/api/spotify/searchSong/:song', spotifyApi.searchSong);
-=======
-	app.get('/api/search', api.search);
->>>>>>> f61f8b300aeed29bd138979501b8738e236767f4
 }

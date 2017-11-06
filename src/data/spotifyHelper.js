@@ -43,6 +43,6 @@ module.exports = {
 
 		}
 
-		return req;
+		return request.put(req);
 	}
 }

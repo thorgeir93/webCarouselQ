@@ -60,3 +60,5 @@ npm-debug.log
 
 # Backup files
 *~backup~*
+.env
+*.env
