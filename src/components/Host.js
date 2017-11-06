@@ -35,8 +35,8 @@ export default class Host extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log( this.state.username );
 
+        console.log( this.state.username );
         if (this.notValidUsername( this.state.username )) {
             // TODO handle a valid username.
             console.log( 'Invalid user name. Allowed letters '+
@@ -94,8 +94,6 @@ export default class Host extends React.Component {
 
         console.log('the catch is done')
         console.log( promiseFetch )
-
-        console.log( data )
 
         // queueID
         let queueID = 'test1'

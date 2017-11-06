@@ -113,5 +113,13 @@ module.exports = {
 	doesQueueExist: function(req, res){
 
 		res.json(/*data*/)
+	},
+	
+    search: function(req, res){
+        //mock_list_of_songs = {
+        //    ''
+        //}
+		res.json(/*data*/)
 	}
+
 }
