@@ -1,4 +1,5 @@
 import api from './src/data/api';
+import spotifyApi from './src/data/spotifyApi';
 
 module.exports = function(app){
 
@@ -20,4 +21,12 @@ module.exports = function(app){
 	app.post('/api/test', api.testPost);
 
 	app.get('/api/test', api.testGet);
+
+	app.get('/api/spotify/login', spotifyApi.login);
+
+	app.get('/api/spotify/callback', spotifyApi.callback);
+
+	app.get('/api/spotify/refreshToken', spotifyApi.refreshToken);
+
+	app.get('/api/spotify/searchSong/:song', spotifyApi.searchSong);
 }

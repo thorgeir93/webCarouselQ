@@ -5,6 +5,17 @@ import helper from './databaseHelper';
 //      -   (thorgeir asks) return queueID when register ?
 //      -   implement the queueID thing.
 
+function doesQueueExist(queueId){
+
+	var doesQueueExistQuery = "SELECT queue_id FROM queues WHERE queue_id = $1";
+
+	helper.executeQuery(doesQueueExistQuery, queueId).then((data) => {
+		return !data;
+	}).catch((error) => {
+		return res.status(500).send(error);
+	})
+}
+
 //connect to the postgres server
 module.exports = {
 
@@ -17,8 +28,6 @@ module.exports = {
 	},
 
 	register: function(req, res){
-        
-        console.log( req.body )
 
 		var username = xss(req.body.userName);
 		var owner = xss(req.body.owner);
@@ -32,11 +41,13 @@ module.exports = {
 			queueId = xss(req.body.queueId) || helper.generateHash(5);
 		}else{
 			queueId = xss(req.body.queueId);
+			if(!doesQueueExist(queueId)){
+				return res.status(404).send("Queue not found");
+			}
 		}
 
 		var hash = helper.generateHash();
 		var hashArray = [hash];
-
 
 		var valuesFor_insertIntoUserInfo = [username,hashArray,owner,hash];
     	var insertIntoUserInfo = 'INSERT INTO userinfo (userinfo_name, userinfo_hashname, UserInfo_Qowner, UserInfo_Active, UserInfo_hashNameId, userinfo_songsplayed) VALUES($1, $2, $3, true, $4,0)'
@@ -49,39 +60,24 @@ module.exports = {
     	var updateQueues = "update queues set users = (select users from queues where queue_id = $1) || $2 where queue_id = $1";
 
     	helper.executeQuery(insertIntoUserInfo, valuesFor_insertIntoUserInfo).then(data => {
-	        console.log(data);
-	        if(!data){
-				return res.sendStatus(500);
-			}
-
+	        
 			if(owner === "true"){
 				helper.executeQuery(insertIntoQueues, valuesFor_insertIntoQueues).then(result => {
-					if(!result){
-						return res.sendStatus(500);
-					}
 					return res.json({queueId: queueId});
 				}).catch(error => {
-			        console.log(error);
-			        return res.sendStatus(500);
+			        return res.status(500).send(error);
 			    });
-
 			}else{
-
 		 		helper.executeQuery(updateQueues, valuesFor_updateQueues).then(result => {
-		 			if(!result){
-		 				return res.sendStatus(500);
-		 			}
 		 			return res.json({queueId: queueId});
 		 		}).catch(error => {
-			        console.log(error);
-			        return res.sendStatus(500);
+			        return res.status(500).send(error);
 			    });
-
 		 	}
 	    })
 	    .catch(error => {
 	        console.log(error);
-	        return res.sendStatus(500);
+	        return res.status(500).send(error);
 	    });
 
 	},
@@ -92,19 +88,20 @@ module.exports = {
 
 		res.json(/*data*/)
 	},
+
 	addSong: function(req, res){
 
 		//so some database stuff
 
 		res.json(/*data*/)
 	},
+
 	removeSong: function(req, res){
 
 		//so some database stuff
 
 		res.json(/*data*/)
 	},
-
 
 	queueData: function(req, res){
 
@@ -114,8 +111,6 @@ module.exports = {
 	},
 
 	doesQueueExist: function(req, res){
-
-		//do some database stuff
 
 		res.json(/*data*/)
 	}

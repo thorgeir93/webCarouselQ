@@ -11,6 +11,12 @@ import NotFoundPage from './components/NotFoundPage';
 import api from './data/api';
 //var bodyParser = require('body-parser')
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv'
+import apiRoutes from '../apiRoutes'
+
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 // initialize the server and configure support for ejs templates
 const app = new Express();
@@ -21,13 +27,20 @@ app.set('views', path.join(__dirname, 'views'));
 // define the folder that will be used for static assets
 app.use(Express.static(path.join(__dirname, 'static')));
 
-//app.get('/api',api.test);
+app.use(cookieParser('kagafhjheyboard casdfat'));
+
+dotenv.config()
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
+app.use(session({
+  store: new MongoStore({
+    //talaðu við mig þorgeir ;)
+  })
+}));
 
 //
 // Middleware
@@ -40,13 +53,7 @@ var allowCrossDomain = function(req, res, next) {
 }
 
 app.use(allowCrossDomain);
-
-import dotenv from 'dotenv'
-import apiRoutes from '../apiRoutes'
-dotenv.config()
-apiRoutes(app)
-//require('dotenv').config()
-//require('../apiRoutes')(app);
+apiRoutes(app);
 
 // universal routing and rendering
 app.get('*', (req, res) => {
@@ -82,6 +89,7 @@ app.get('*', (req, res) => {
     }
   );
 });
+
 
 
 
