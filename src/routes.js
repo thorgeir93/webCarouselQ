@@ -11,7 +11,7 @@ import Player from './components/Player';
 import NotFoundPage from './components/NotFoundPage';
 
 //import { BrowserHistory } from 'react-router/lib/BrowserHistory'.default;
-//var BrowserHistory = require('react-router/lib/browserHistory').default;
+
 import BrowserHistory from 'react-router/lib/browserHistory';
 
 const routes = (

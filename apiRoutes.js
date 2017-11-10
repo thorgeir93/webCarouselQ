@@ -1,5 +1,7 @@
 import api from './src/data/api';
 import spotifyApi from './src/data/spotifyApi';
+import passport from 'passport'
+
 
 module.exports = function(app){
 
@@ -24,9 +26,17 @@ module.exports = function(app){
 	
 	app.get('/api/spotify/login', spotifyApi.login);
 
-	app.get('/api/spotify/callback', spotifyApi.callback);
-
 	app.get('/api/spotify/refreshToken', spotifyApi.refreshToken);
 
 	app.get('/api/spotify/searchSong/:song', spotifyApi.searchSong);
+
+	app.get('/api/spotify/login', spotifyApi.login)
+		
+	app.get('/auth/spotify', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'] }),
+		function(req, res){
+			//this will never be called
+		});
+	
+	app.get('/api/spotify/callback',passport.authenticate('spotify', { failureRedirect: '/login' }),spotifyApi.callback);
+
 }

@@ -8,7 +8,6 @@
   },
   "description": "Simple way to listen to music together.",
   "main": "src/server.js",
-  "repository": "git@github.com:lmammino/judo-heroes.git",
   "repository": "git@github.com:thorgeir93/webCarouselQ",
   "scripts": {
     "start": "./node_modules/.bin/babel-node --presets=react,es2015 ./src/server.js",
@@ -34,6 +33,7 @@
     "classnames": "^2.2.5",
     "connect-pg-simple": "^4.2.0",
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "css-loader": "^0.27.2",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.1",

@@ -42,7 +42,26 @@ export default class Host extends React.Component {
             console.log( 'Invalid user name. Allowed letters '+
                          'are between a-z or A-Z.' )
         }
+        var header = new Headers({"Access-Control-Allow-Origin": "http://localhost:3000",
+            "Accept": "application/json"});
 
+        var myInit = {
+          method : 'GET',
+          headers: header
+        }
+
+        fetch("https://accounts.spotify.com/authorize?response_type=code&client_id=63f59894866d46648c5cd2975feea347&scope=user-read-private%20user-read-email&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fspotify%2Fcallback&state=64Xju9waKcKStjoW",myInit)
+            .then((response) => {
+                return response.json() ;
+            }, (error) => {
+                console.log(error);
+            })
+            .then((response) => {
+                console.log(response);
+            }, (error) => {
+                console.log(error);
+            })
+/*
         // Register the user
         //
        
@@ -100,11 +119,11 @@ export default class Host extends React.Component {
         this.setState({'queueID': queueID})
         
         console.log( 'this.props.history' )
-        console.log( this.props.history )
+        console.log( this.props.history )*/
 
         // Go to next path
         // should it be '/queueID/player'?
-        this.props.history.push('/player') 
+        //this.props.history.push('/player') 
     }
 
     render() {
@@ -122,6 +141,7 @@ export default class Host extends React.Component {
                         type='button' 
                         value='Sumbit'/>
                 </form>
+                <a href="/api/spotify/login" class="btn btn-primary">Log in with Spotify</a>
             </div>
         );
   }
@@ -135,3 +155,5 @@ export default class Host extends React.Component {
                    // </div>
 
             //<p>Start the party by create a group for other members to join.</p>
+
+

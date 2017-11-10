@@ -1,14 +1,5 @@
-var pgp = require('pg-promise')();
-
-
-
-
-
-
-
-
-
-
+import pgp from 'pg-promise';
+pgp();
 
 module.exports = {
 

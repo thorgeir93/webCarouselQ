@@ -1,8 +1,8 @@
 import helper from './databaseHelper';
 import request from 'request-promise';
 import querystring from 'querystring';
-import spotifyHelper from './spotifyHelper';
 import spotifyWebApi from 'spotify-web-api-node';
+
 import dotenv from 'dotenv'
 dotenv.config();
 
@@ -20,78 +20,26 @@ var spotifyApi = new spotifyWebApi({
   redirectUri : redirect_uri
 });
 
+
 module.exports = {
 
-	login: function(req, res){
+	login: function(req, res, next){
 
-		var state = helper.generateHash(16);
-
-		res.cookie(stateKey, state);
-		var scope = 'user-read-private user-read-email';
-		var url = 'https://accounts.spotify.com/authorize?' +
-			querystring.stringify({
-				response_type: 'code',
-				client_id: client_id,
-				scope: scope,
-				redirect_uri: redirect_uri,
-				state: state
-			});
-		res.redirect(url);
+		res.redirect('/auth/spotify');
 	},
 
-	callback: function(req, res){
- 		var code = req.query.code || null;
-		var state = req.query.state || null;
-		var storedState = req.cookies ? req.cookies[stateKey] : null;
-		console.log("inn í callback")
-		if (state === null || state !== storedState) {
-
-			console.log('state not found');
-			res.redirect('/#' +
-				querystring.stringify({
-					error: 'state_mismatch'
-				}));
-		} else {
-			res.clearCookie(stateKey);
-			var authOptions = {
-				url: 'https://accounts.spotify.com/api/token',
-				form: {
-					code: code,
-					redirect_uri: redirect_uri,
-					grant_type: 'authorization_code'
-				},
-				headers: {
-					'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-				},
-				json: true
-			};
-			
-			request.post(authOptions).then((data) => {
-				
 	
-				var access_token = data.access_token;
-				req.session.access_token = access_token;
+	callback: function(req, res){
 
-				refresh_token = data.refresh_token;
-				options = {
-					url: 'https://api.spotify.com/v1/me',
-					headers: { 'Authorization': 'Bearer ' + access_token },
-					json: true
-				};
-				
-				console.log("session er",req.session)
-
-				spotifyApi.setAccessToken(req.session.access_token);
-				// we can also pass the token to the browser to make requests from there
-				res.status(200).send("suck sess");
-				
-			}).catch((error) => {
-				console.log(error);
-				res.redirect('/#' +
-						querystring.stringify({
-							error: 'invalid_token'
-						}));
-			})
+		var access_token = req.user.accessToken;
+		var user_name = req.user.id;
+		if(!access_token || !user_name){
+			res.redirect("/");
+		}else{
+			req.session.access_token = access_token;
+			req.session.user_name = user_name
+			console.log(access_token, user_name)
+			res.redirect("/Search");
 		}
 	},
 
@@ -134,7 +82,7 @@ module.exports = {
 	 *					it contains an error object. Not returned if a callback is given.
 	 */
 	searchAlbums: function(query, options) {
-		return spotifyHelper.search(query, ['album'], options);
+
 	},
 
 	/**
@@ -148,7 +96,6 @@ module.exports = {
 	 *					it contains an error object. Not returned if a callback is given.
 	 */
 	searchArtists: function(query, options) {
-		return spotifyHelper.search(query, ['artist'], options);
 	},
 
 	/**
@@ -169,11 +116,8 @@ module.exports = {
 	searchSong: function(req, res){
 		var song = req.params.song;
 		console.log('hérna inni')
-		//console.log(song, req.session.access_token, req.session, req)
-		//spotifyHelper.search(song, ['track'], null, null, req.session.access_token).then((song) =>{
-		//	console.log(song.tracks.items[0].uri);
-		//	spotifyHelper.play({context_uri: song.tracks.items[0].uri},  req.session.access_token, res, req);
-		//})
+
+
 		spotifyApi.searchTracks('Love', { limit : 5})
 		  .then(function(data) {
 		    console.log('Search by "Love"', data.body.tracks.items[0].uri);
