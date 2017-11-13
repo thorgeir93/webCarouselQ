@@ -26,13 +26,15 @@ module.exports = function(app){
 	
 	app.get('/api/spotify/login', spotifyApi.login);
 
+	app.get('/api/spotify/play', spotifyApi.play);
+
 	app.get('/api/spotify/refreshToken', spotifyApi.refreshToken);
 
 	app.get('/api/spotify/searchSong/:song', spotifyApi.searchSong);
 
 	app.get('/api/spotify/login', spotifyApi.login)
 		
-	app.get('/auth/spotify', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'] }),
+	app.get('/auth/spotify', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private', 'user-read-playback-state', 'user-modify-playback-state'] }),
 		function(req, res){
 			//this will never be called
 		});

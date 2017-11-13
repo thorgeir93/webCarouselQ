@@ -50,8 +50,7 @@ export default class Host extends React.Component {
           headers: header
         }
 
-        fetch("https://accounts.spotify.com/authorize?response_type=code&client_id=63f59894866d46648c5cd2975feea347&scope=user-read-private%20user-read-email&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fspotify%2Fcallback&state=64Xju9waKcKStjoW",myInit)
-            .then((response) => {
+        fetch("http://localhost:3000/api/spotify/login").then((response) => {
                 return response.json() ;
             }, (error) => {
                 console.log(error);
@@ -142,6 +141,7 @@ export default class Host extends React.Component {
                         value='Sumbit'/>
                 </form>
                 <a href="/api/spotify/login" class="btn btn-primary">Log in with Spotify</a>
+                <a href="/api/spotify/play" class="btn btn-primary">play song</a>
             </div>
         );
   }

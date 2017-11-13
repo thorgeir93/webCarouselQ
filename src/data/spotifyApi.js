@@ -36,10 +36,13 @@ module.exports = {
 		if(!access_token || !user_name){
 			res.redirect("/");
 		}else{
+			spotifyApi.setCredentials({
+				'accessToken': access_token,
+			})
 			req.session.access_token = access_token;
 			req.session.user_name = user_name
 			console.log(access_token, user_name)
-			res.redirect("/Search");
+			res.redirect("/host");
 		}
 	},
 
@@ -143,16 +146,48 @@ module.exports = {
    * @returns {Promise|undefined} A promise that if successful, resolves into a paging object of tracks,
    *          otherwise an error. Not returned if a callback is given.
    */
-  play: function(options, token, res, req) {
-  	var req = {
-			url: 'https://api.spotify.com/v1/me/player/play',
-			body: options,
-			headers: {'Authorization': 'Bearer ' + token,
-					  'Content-Type': 'application/json'},
+  play: function(res, req) {
 
-		}
-    res.send(options, token).then((something) => {
-    	console.log("something: ", something);
-    })
+  	/*spotifyApi.searchTracks('Love', { limit : 5})
+		  .then(function(data) {
+		    console.log('Search by "Love"', data.body.tracks.items[0].uri);
+		    var audio = new Audio();
+		    audio.src = song.tracks.items[0].href;
+		    audio.play();
+		    spotifyApi.play({context_uri: song.tracks.items[0].uri}).then(() => {
+		    	console.log("something is playing?")
+		    },(error) => {
+		    	console.log('something failed',error)
+		    })
+		  }, function(err) {
+		    console.error(err);
+		  });*/
+  	spotifyApi.getMyDevices()
+  		.then((data) => {
+  			console.log(data.body.devices)
+  			if(data.body && data.body.devices){
+  				var activeDevice = data.body.devices.filter((item) => {return item.is_active});
+  				if(activeDevice){
+  					return spotifyApi.transferMyPlayback({'deviceIds' : [activeDevice[0].id], 'play': true});
+  				}else{
+  					res.redirect("/login");
+  				}
+  			}
+  		}, (error) => {
+  			console.log(error)
+  		})
+  		.then((data) => {
+  			console.log("komst inn hér")
+  			return spotifyApi.play({"uris":["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]})
+  		}, (error) =>{
+  			console.log(error);
+  		})
+  		.then((data) => {
+  			console.log('vá en flott request', data);
+  			res.redirect("/host");
+  		}, (error) =>  {
+  			console.log(error);
+  		})
+  	
   }
 }
