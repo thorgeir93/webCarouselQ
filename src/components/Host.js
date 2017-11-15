@@ -30,7 +30,7 @@ export default class Host extends React.Component {
     }
 
     notValidUsername( username ){
-        return !( /^[a-zA-Z]+$/.test(username) );
+        return !( /^[a-zA-Z]+[0-9]*$/.test(username) );
     }
 
     handleSubmit(event) {
@@ -39,37 +39,14 @@ export default class Host extends React.Component {
         console.log( this.state.username );
         if (this.notValidUsername( this.state.username )) {
             // TODO handle a valid username.
-            console.log( 'Invalid user name. Allowed letters '+
+            alert( 'Invalid user name. Allowed letters '+
                          'are between a-z or A-Z.' )
-        }
-        var header = new Headers({"Access-Control-Allow-Origin": "http://localhost:3000",
-            "Accept": "application/json"});
-
-        var myInit = {
-          method : 'GET',
-          headers: header
+            return;
         }
 
-        fetch("http://localhost:3000/api/spotify/login").then((response) => {
-                return response.json() ;
-            }, (error) => {
-                console.log(error);
-            })
-            .then((response) => {
-                console.log(response);
-            }, (error) => {
-                console.log(error);
-            })
-/*
-        // Register the user
-        //
-       
-        // TODO     Use env variable for the url!
-        //          It should be a heroku server.
-        let url = 'http://192.168.1.47:3000'
+        var baseUrl = window.location.origin;        
 
-        // TODO let this work. understand promises.
-        let promiseFetch = fetch( `${url}/api/register`, {
+        let promiseFetch = fetch( `${baseUrl}/api/register`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -79,50 +56,16 @@ export default class Host extends React.Component {
                 'userName': this.state.username,
                 'owner': true
             })
+        }).then((response) => {
+            console.log(response)
+            if(response.ok){
+                this.state.queueID = response.queueID;
+                console.log(response.queueID);
+                location = baseUrl + "/api/spotify/login";
+            }
+        }, (error) => {
+            alert(error);
         })
-
-        console.log( 'promiseFetch' ) 
-        console.log( promiseFetch ) 
-        console.log( 'going to do resolve.' ) 
-        
-        // Throw error if the status code in not valid.
-        promiseFetch.then( res => {
-            console.log('TODO implement the status code check.')
-            console.log(res)
-            return res 
-            if( res.status == 201 ){ 
-                return res; 
-            } 
-            else {
-                let e = new Error(res.statusText)
-                e.response = res
-                throw e
-            }  
-        })
-      
-        console.log('first then done')
-
-        // Return a JSON result. 
-        promiseFetch.then( res => res.json() )
-        
-        console.log('second then done')
-    
-        // Return the error if the promise rejects.
-        promiseFetch.catch( e => e )
-
-        console.log('the catch is done')
-        console.log( promiseFetch )
-
-        // queueID
-        let queueID = 'test1'
-        this.setState({'queueID': queueID})
-        
-        console.log( 'this.props.history' )
-        console.log( this.props.history )*/
-
-        // Go to next path
-        // should it be '/queueID/player'?
-        //this.props.history.push('/player') 
     }
 
     render() {
@@ -140,8 +83,6 @@ export default class Host extends React.Component {
                         type='button' 
                         value='Sumbit'/>
                 </form>
-                <a href="/api/spotify/login" class="btn btn-primary">Log in with Spotify</a>
-                <a href="/api/spotify/play" class="btn btn-primary">play song</a>
             </div>
         );
   }

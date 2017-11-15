@@ -24,7 +24,6 @@ var spotifyApi = new spotifyWebApi({
 module.exports = {
 
 	login: function(req, res, next){
-
 		res.redirect('/auth/spotify');
 	},
 
@@ -33,16 +32,20 @@ module.exports = {
 
 		var access_token = req.user.accessToken;
 		var user_name = req.user.id;
+		refresh_token = req.user.refreshToken;
+		console.log(req.user)
 		if(!access_token || !user_name){
-			res.redirect("/");
+			res.redirect("/login");
 		}else{
 			spotifyApi.setCredentials({
 				'accessToken': access_token,
+				'refreshToken': refresh_token
 			})
 			req.session.access_token = access_token;
-			req.session.user_name = user_name
+			req.session.user_name = user_name;
+			req.session.loggedIn = true;
 			console.log(access_token, user_name)
-			res.redirect("/host");
+			res.redirect("/player");
 		}
 	},
 
@@ -117,24 +120,6 @@ module.exports = {
 	},
 
 	searchSong: function(req, res){
-		var song = req.params.song;
-		console.log('hérna inni')
-
-
-		spotifyApi.searchTracks('Love', { limit : 5})
-		  .then(function(data) {
-		    console.log('Search by "Love"', data.body.tracks.items[0].uri);
-		    var audio = new Audio();
-		    audio.src = song.tracks.items[0].href;
-		    audio.play();
-		    spotifyApi.play({context_uri: song.tracks.items[0].uri}).then(() => {
-		    	console.log("something is playing?")
-		    },(error) => {
-		    	console.log('something failed',error)
-		    })
-		  }, function(err) {
-		    console.error(err);
-		  });
 
 	},
 
@@ -184,7 +169,7 @@ module.exports = {
   		})
   		.then((data) => {
   			console.log('vá en flott request', data);
-  			res.redirect("/host");
+  			res.redirect("/player");
   		}, (error) =>  {
   			console.log(error);
   		})

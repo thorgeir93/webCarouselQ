@@ -1,6 +1,4 @@
-import pgp from 'pg-promise';
-pgp();
-
+var pgp = require('pg-promise')({});
 module.exports = {
 
 	executeQuery: function(query, values){

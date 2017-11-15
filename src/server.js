@@ -9,12 +9,10 @@ import { match, RouterContext } from 'react-router';
 import routes from './routes';
 import NotFoundPage from './components/NotFoundPage';
 import api from './data/api';
-//var bodyParser = require('body-parser')
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv'
 import apiRoutes from '../apiRoutes'
-import cors from 'cors';
 
 import passport from 'passport';
 import spotifyPassport from 'passport-spotify';
@@ -26,6 +24,7 @@ passport.use(new SpotifyStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     profile.accessToken = accessToken;
+    profile.refreshToken = refreshToken;
     return done(null, profile);
   }
 ));
@@ -44,25 +43,12 @@ const MongoStore = require('connect-mongo')(session);
 // initialize the server and configure support for ejs templates
 const app = new Express();
 const server = new Server(app);
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Origin');
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
-}
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(allowCrossDomain);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(cors());
 
 // define the folder that will be used for static assets
 app.use(Express.static(path.join(__dirname, 'static')));
@@ -88,13 +74,26 @@ app.use(session({
 //
 // Middleware
 //
+//Ensure logged in 
+app.all('*', (req, res, next) => {
+  console.log(req.path, req.session.loggedIn)
+  if(req.session.loggedIn || 
+    req.path === "/api/spotify/login" ||
+    req.path === "/api/spotify/callback" ||
+    req.path === "/host" ||
+    req.path === "/" ||
+    req.path === "/api/register" ||
+    req.path === "/auth/spotify"){
+    return next();
+  }
+  console.log("redirecting")
+  res.redirect("/")
+});
 
 apiRoutes(app);
 
 // universal routing and rendering
 app.get('*', (req, res) => {
-  console.log( 'Request url man:' + req.url )
-  console.log( 'Available routes:' )
   match(
     { routes, location: req.url },
     (err, redirectLocation, renderProps) => {
